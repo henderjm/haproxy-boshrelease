@@ -318,18 +318,8 @@ backend http-routers
     compression type <%= p("ha_proxy.compress_types") %>
   <%- end -%>
 <%
-  backend_servers = []
-  backend_port = nil
-  if_link("http_backend") do |backend|
-    backend_servers = backend.instances.map(&:address)
-    backend_port = backend.p("port", p("ha_proxy.backend_port"))
-  end.else_if_p("ha_proxy.backend_servers") do |servers|
-    backend_servers = servers
-    backend_port = p("ha_proxy.backend_port")
-  end.else_if_p("ha_proxy.backend_servers_instance_group") do |instance_group|
-    backend_servers = link(instance_group).instances.map(&:address)
-    backend_port = p("ha_proxy.backend_port")
-  end
+  backend_servers = link('kubernetes-workers').instances.map(&:address)
+  backend_port = p("ha_proxy.backend_port")
   resolvers = ""
   if_p("ha_proxy.resolvers") do
     resolvers = "resolvers default "

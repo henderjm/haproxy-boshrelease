@@ -32,6 +32,10 @@ consumes:
     type: ssh_proxy
     optional: true
 
+  - name: kubernetes-workers
+    type: kubernetes-workers
+    optional: true
+
   - name: tcp_router
     type: tcp-router
     optional: true
