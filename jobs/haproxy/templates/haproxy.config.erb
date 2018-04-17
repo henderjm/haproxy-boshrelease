@@ -326,6 +326,9 @@ backend http-routers
   end.else_if_p("ha_proxy.backend_servers") do |servers|
     backend_servers = servers
     backend_port = p("ha_proxy.backend_port")
+  end.else_if_p("ha_proxy.backend_servers_instance_group") do |instance_group|
+    backend_servers = link(instance_group).instances.map(&:address)
+    backend_port = p("ha_proxy.backend_port")
   end
   resolvers = ""
   if_p("ha_proxy.resolvers") do
